@@ -23,3 +23,7 @@ body {
   max-width: 640px;
   min-height: 100vh;
 }
+
+button {
+  cursor: pointer;
+}
