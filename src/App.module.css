@@ -20,10 +20,9 @@
   margin: 0;
 }
 
-.chat-container {
-  flex-grow: 1;
+.chatContainer {
+  height: calc(100vh - 240px);
   width: 100%;
-  background: #ffffff;
+  background: #212121;
   border-radius: 16px;
-  overflow-y: auto;
 }
