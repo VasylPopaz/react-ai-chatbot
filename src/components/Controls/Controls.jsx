@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 import s from "./Controls.module.css";
+
 const SendIcon = () => {
   return (
     <svg
@@ -13,16 +16,39 @@ const SendIcon = () => {
   );
 };
 
-const Controls = () => {
+const Controls = ({ onSend }) => {
+  const [content, setContent] = useState("");
+
+  const handleContentChange = (event) => {
+    setContent(event.target.value);
+  };
+
+  const handleContentSend = () => {
+    if (content.trim() !== "") {
+      onSend(content);
+      setContent("");
+    }
+  };
+
+  const handleEnterPress = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleContentSend();
+    }
+  };
+
   return (
     <div className={s.controls}>
       <div className={s.textAreaContainer}>
         <textarea
           className={s.textArea}
           placeholder="Message AI Chatbot"
+          value={content}
+          onChange={handleContentChange}
+          onKeyDown={handleEnterPress}
         ></textarea>
       </div>
-      <button className={s.button} type="button">
+      <button className={s.button} type="button" onClick={handleContentSend}>
         <SendIcon />
       </button>
     </div>

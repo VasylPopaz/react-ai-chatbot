@@ -3,12 +3,15 @@ import { useState } from "react";
 import Chat from "./components/Chat/Chat";
 import Controls from "./components/Controls/Controls";
 
-import { MESSAGES } from "./constants/messages";
 import s from "./App.module.css";
 
 function App() {
-  // eslint-disable-next-line
-  const [messages, setMessages] = useState(MESSAGES);
+  const [messages, setMessages] = useState([]);
+
+  const handleContentSend = (content) => {
+    setMessages((prevMessages) => [...prevMessages, { role: "user", content }]);
+  };
+
   return (
     <div className={s.app}>
       <header className={s.header}>
@@ -17,7 +20,7 @@ function App() {
       </header>
       <div className={s.chatContainer}>
         <Chat messages={messages} />
-        <Controls />
+        <Controls onSend={handleContentSend} />
       </div>
     </div>
   );
