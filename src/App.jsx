@@ -1,15 +1,32 @@
-import { useState } from "react";
-
 import Chat from "./components/Chat/Chat";
 import Controls from "./components/Controls/Controls";
 
+import { useMessages } from "./hooks/useMessages";
+import { Assistant } from "./assistants/googleai";
 import s from "./App.module.css";
 
-function App() {
-  const [messages, setMessages] = useState([]);
+const App = () => {
+  const { messages, addMessage } = useMessages();
 
-  const handleContentSend = (content) => {
-    setMessages((prevMessages) => [...prevMessages, { role: "user", content }]);
+  const assistant = new Assistant();
+
+  const handleContentSend = async (content) => {
+    addMessage({ role: "user", content });
+
+    try {
+      const result = await assistant.chat(content);
+
+      addMessage({
+        role: "assistant",
+        content: result,
+      });
+    } catch (e) {
+      console.log(e);
+      addMessage({
+        role: "system",
+        content: "Sorry, I couldn't process your request. Please try again.",
+      });
+    }
   };
 
   return (
@@ -24,6 +41,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
