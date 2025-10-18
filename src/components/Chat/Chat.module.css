@@ -1,11 +1,21 @@
 .chat {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   height: 100%;
-  padding: 8px;
+  padding: 12px;
   overflow-y: auto;
   margin-bottom: 10px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group:nth-last-of-type(2) {
+  min-height: calc(100% - 12px);
 }
 
 .message {
@@ -17,6 +27,6 @@
   &[data-role="user"] {
     padding-block: 8px;
     align-self: flex-end;
-    background: #2f2f2f;
+    background: light-dark(#f3f3f3, #303030);
   }
 }

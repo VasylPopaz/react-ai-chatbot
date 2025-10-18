@@ -1,20 +1,24 @@
+import { useState } from "react";
+
 import Chat from "./components/Chat/Chat";
+import Loader from "./components/Loader/Loader";
 import Controls from "./components/Controls/Controls";
 
 import { useMessages } from "./hooks/useMessages";
-import { Assistant } from "./assistants/googleai";
+import { Assistant } from "./assistants/openai";
 import s from "./App.module.css";
 
 const App = () => {
   const { messages, addMessage } = useMessages();
+  const [isLoading, setIsLoading] = useState(false);
 
   const assistant = new Assistant();
 
   const handleContentSend = async (content) => {
     addMessage({ role: "user", content });
-
+    setIsLoading(true);
     try {
-      const result = await assistant.chat(content);
+      const result = await assistant.chat(content, messages);
 
       addMessage({
         role: "assistant",
@@ -26,6 +30,8 @@ const App = () => {
         role: "system",
         content: "Sorry, I couldn't process your request. Please try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,8 +43,9 @@ const App = () => {
       </header>
       <div className={s.chatContainer}>
         <Chat messages={messages} />
-        <Controls onSend={handleContentSend} />
+        <Controls isDisabled={isLoading} onSend={handleContentSend} />
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };
