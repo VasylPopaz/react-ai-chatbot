@@ -19,4 +19,15 @@ export class Assistant {
     const result = await this.#chat.sendMessage(content);
     return result.response.text();
   }
+
+  async *chatStream(content) {
+    if (!this.#chat) throw new Error("Chat is not initialized");
+
+    const result = await this.#chat.sendMessageStream(content);
+
+    for await (const chunk of result.stream) {
+      yield chunk.text();
+    }
+    return this.#chat.sendMessage(content);
+  }
 }
