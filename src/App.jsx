@@ -9,8 +9,9 @@ import { Assistant } from "./assistants/openai";
 import s from "./App.module.css";
 
 const App = () => {
-  const { messages, addMessage } = useMessages();
+  const { messages, addMessage, updateLastMessageContent } = useMessages();
   const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
 
   const assistant = new Assistant();
 
@@ -18,20 +19,28 @@ const App = () => {
     addMessage({ role: "user", content });
     setIsLoading(true);
     try {
-      const result = await assistant.chat(content, messages);
+      const result = assistant.chatStream(content, messages);
 
-      addMessage({
-        role: "assistant",
-        content: result,
-      });
+      let isFirstChunk = false;
+      for await (const chunk of result) {
+        if (!isFirstChunk) {
+          isFirstChunk = true;
+          addMessage({ role: "assistant", content: "" });
+          setIsLoading(false);
+          setIsStreaming(true);
+        }
+        updateLastMessageContent(chunk);
+      }
+
+      setIsStreaming(false);
     } catch (e) {
       console.log(e);
       addMessage({
         role: "system",
         content: "Sorry, I couldn't process your request. Please try again.",
       });
-    } finally {
       setIsLoading(false);
+      setIsStreaming(false);
     }
   };
 
@@ -43,7 +52,10 @@ const App = () => {
       </header>
       <div className={s.chatContainer}>
         <Chat messages={messages} />
-        <Controls isDisabled={isLoading} onSend={handleContentSend} />
+        <Controls
+          isDisabled={isLoading || isStreaming}
+          onSend={handleContentSend}
+        />
       </div>
       {isLoading && <Loader />}
     </div>
