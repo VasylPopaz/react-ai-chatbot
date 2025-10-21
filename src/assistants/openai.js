@@ -7,13 +7,15 @@ const openai = new OpenAI({
 });
 
 export class Assistant {
+  #client;
   #model;
-  constructor(model = "gpt-3.5-turbo") {
+  constructor(client = openai, model = "gpt-3.5-turbo") {
+    this.#client = client;
     this.#model = model;
   }
 
   async chat(content, history) {
-    const result = await openai.responses.create({
+    const result = await this.#client.responses.create({
       model: this.#model,
       input: [...history, { role: "user", content }],
     });
@@ -21,7 +23,7 @@ export class Assistant {
   }
 
   async *chatStream(content, history) {
-    const result = await openai.chat.completions.create({
+    const result = await this.#client.chat.completions.create({
       model: this.#model,
       messages: [...history, { role: "user", content }],
       stream: true,
