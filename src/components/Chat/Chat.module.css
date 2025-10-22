@@ -29,4 +29,8 @@
     align-self: flex-end;
     background: light-dark(#f3f3f3, #303030);
   }
+
+  &[data-role="system"] {
+    background-color: rgb(224, 155, 155);
+  }
 }

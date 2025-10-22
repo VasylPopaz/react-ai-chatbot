@@ -15,22 +15,34 @@ export class Assistant {
   }
 
   async chat(content, history) {
-    const result = await this.#client.responses.create({
-      model: this.#model,
-      input: [...history, { role: "user", content }],
-    });
-    return result.output_text;
+    try {
+      const result = await this.#client.responses.create({
+        model: this.#model,
+        input: [...history, { role: "user", content }],
+      });
+      return result.output_text;
+    } catch (error) {
+      throw this.#parseError(error);
+    }
   }
 
   async *chatStream(content, history) {
-    const result = await this.#client.chat.completions.create({
-      model: this.#model,
-      messages: [...history, { role: "user", content }],
-      stream: true,
-    });
+    try {
+      const result = await this.#client.chat.completions.create({
+        model: this.#model,
+        messages: [...history, { role: "user", content }],
+        stream: true,
+      });
 
-    for await (const chunk of result) {
-      yield chunk.choices[0]?.delta?.content || "";
+      for await (const chunk of result) {
+        yield chunk.choices[0]?.delta?.content || "";
+      }
+    } catch (error) {
+      throw this.#parseError(error);
     }
+  }
+
+  #parseError(error) {
+    return error;
   }
 }

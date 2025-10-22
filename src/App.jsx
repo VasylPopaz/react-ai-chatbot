@@ -5,7 +5,7 @@ import Loader from "./components/Loader/Loader";
 import Controls from "./components/Controls/Controls";
 
 import { useMessages } from "./hooks/useMessages";
-import { Assistant } from "./assistants/googleai";
+import { Assistant } from "./assistants/openai";
 import s from "./App.module.css";
 
 const App = () => {
@@ -19,9 +19,12 @@ const App = () => {
     addMessage({ role: "user", content });
     setIsLoading(true);
     try {
-      const result = assistant.chatStream(content, messages);
-      let isFirstChunk = false;
+      const result = assistant.chatStream(
+        content,
+        messages.filter(({ role }) => role !== "system")
+      );
 
+      let isFirstChunk = false;
       for await (const chunk of result) {
         if (!isFirstChunk) {
           isFirstChunk = true;
@@ -33,11 +36,12 @@ const App = () => {
       }
 
       setIsStreaming(false);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
       addMessage({
         role: "system",
-        content: "Sorry, I couldn't process your request. Please try again.",
+        content:
+          error?.message ??
+          "Sorry, I couldn't process your request. Please try again.",
       });
       setIsLoading(false);
       setIsStreaming(false);

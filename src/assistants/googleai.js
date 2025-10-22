@@ -11,20 +11,56 @@ export class Assistant {
   }
 
   async chat(content) {
-    if (!this.#chat) throw new Error("Chat is not initialized");
-
-    const result = await this.#chat.sendMessage({ message: content });
-    return result.text;
+    try {
+      const result = await this.#chat.sendMessage({ message: content });
+      return result.text;
+    } catch (error) {
+      throw this.#parseError(error);
+    }
   }
 
   async *chatStream(content) {
-    if (!this.#chat) throw new Error("Chat is not initialized");
+    try {
+      const result = await this.#chat.sendMessageStream({ message: content });
 
-    const result = await this.#chat.sendMessageStream({ message: content });
-
-    for await (const chunk of result) {
-      yield chunk.text;
+      for await (const chunk of result) {
+        yield chunk.text;
+      }
+      return this.#chat.sendMessage(content);
+    } catch (error) {
+      throw this.#parseError(error);
     }
-    return this.#chat.sendMessage(content);
+  }
+
+  #parseError(error) {
+    try {
+      if (typeof error?.message === "string") {
+        try {
+          const parsed = JSON.parse(error.message);
+          if (
+            parsed?.error?.message &&
+            typeof parsed.error.message === "string"
+          ) {
+            try {
+              const innerParsed = JSON.parse(parsed.error.message);
+              return innerParsed?.error || parsed.error;
+            } catch {
+              return parsed.error;
+            }
+          }
+          return parsed?.error || parsed?.message || error;
+        } catch {
+          return error;
+        }
+      }
+
+      if (error?.error?.message) {
+        return error.error;
+      }
+
+      return "Unknown error occurred";
+    } catch {
+      return "Error parsing server response";
+    }
   }
 }
