@@ -1,32 +1,29 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const googleai = new GoogleGenerativeAI(
-  import.meta.env.VITE_GOOGLE_AI_API_KEY || ""
-);
+const googleai = new GoogleGenAI({
+  apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY || "",
+});
 
 export class Assistant {
   #chat;
   constructor(model = "gemini-2.5-flash-lite") {
-    const gemini = googleai.getGenerativeModel({
-      model,
-    });
-    this.#chat = gemini.startChat({ history: [] });
+    this.#chat = googleai.chats.create({ model });
   }
 
   async chat(content) {
     if (!this.#chat) throw new Error("Chat is not initialized");
 
-    const result = await this.#chat.sendMessage(content);
-    return result.response.text();
+    const result = await this.#chat.sendMessage({ message: content });
+    return result.text;
   }
 
   async *chatStream(content) {
     if (!this.#chat) throw new Error("Chat is not initialized");
 
-    const result = await this.#chat.sendMessageStream(content);
+    const result = await this.#chat.sendMessageStream({ message: content });
 
-    for await (const chunk of result.stream) {
-      yield chunk.text();
+    for await (const chunk of result) {
+      yield chunk.text;
     }
     return this.#chat.sendMessage(content);
   }

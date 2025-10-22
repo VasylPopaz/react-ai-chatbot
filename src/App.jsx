@@ -5,7 +5,7 @@ import Loader from "./components/Loader/Loader";
 import Controls from "./components/Controls/Controls";
 
 import { useMessages } from "./hooks/useMessages";
-import { Assistant } from "./assistants/deepseekai";
+import { Assistant } from "./assistants/googleai";
 import s from "./App.module.css";
 
 const App = () => {
@@ -20,8 +20,8 @@ const App = () => {
     setIsLoading(true);
     try {
       const result = assistant.chatStream(content, messages);
-
       let isFirstChunk = false;
+
       for await (const chunk of result) {
         if (!isFirstChunk) {
           isFirstChunk = true;
