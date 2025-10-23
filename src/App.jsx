@@ -5,7 +5,7 @@ import Loader from "./components/Loader/Loader";
 import Controls from "./components/Controls/Controls";
 
 import { useMessages } from "./hooks/useMessages";
-import { Assistant } from "./assistants/openai";
+import { Assistant } from "./assistants/antropical";
 import s from "./App.module.css";
 
 const App = () => {
