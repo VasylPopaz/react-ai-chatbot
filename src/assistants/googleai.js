@@ -26,7 +26,6 @@ export class Assistant {
       for await (const chunk of result) {
         yield chunk.text;
       }
-      return this.#chat.sendMessage(content);
     } catch (error) {
       throw this.#parseError(error);
     }
