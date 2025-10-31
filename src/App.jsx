@@ -3,17 +3,19 @@ import { useState } from "react";
 import Chat from "./components/Chat/Chat";
 import Loader from "./components/Loader/Loader";
 import Controls from "./components/Controls/Controls";
+import Assistant from "./components/Assistant/Assistant";
 
 import { useMessages } from "./hooks/useMessages";
-import { Assistant } from "./assistants/antropical";
+
 import s from "./App.module.css";
+
+let assistant;
 
 const App = () => {
   const { messages, addMessage, updateLastMessageContent } = useMessages();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-
-  const assistant = new Assistant();
 
   const handleContentSend = async (content) => {
     addMessage({ role: "user", content });
@@ -48,6 +50,10 @@ const App = () => {
     }
   };
 
+  const handleAssistantChange = (newAssistant) => {
+    assistant = newAssistant;
+  };
+
   return (
     <div className={s.app}>
       <header className={s.header}>
@@ -60,6 +66,7 @@ const App = () => {
           isDisabled={isLoading || isStreaming}
           onSend={handleContentSend}
         />
+        <Assistant onAssistantChange={handleAssistantChange} />
       </div>
       {isLoading && <Loader />}
     </div>
