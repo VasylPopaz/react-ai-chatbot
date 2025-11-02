@@ -8,7 +8,7 @@ const anthropic = new Anthropic({
 export class Assistant {
   #client;
   #model;
-  constructor(client = anthropic, model = "claude-haiku-4-5-20251001") {
+  constructor(model = "claude-haiku-4-5-20251001", client = anthropic) {
     this.#client = client;
     this.#model = model;
   }

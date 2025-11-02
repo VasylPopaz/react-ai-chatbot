@@ -9,7 +9,7 @@ const openai = new OpenAI({
 export class Assistant {
   #client;
   #model;
-  constructor(client = openai, model = "gpt-3.5-turbo") {
+  constructor(model = "gpt-3.5-turbo", client = openai) {
     this.#client = client;
     this.#model = model;
   }

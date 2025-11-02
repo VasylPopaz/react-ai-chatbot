@@ -9,7 +9,7 @@ const openai = new OpenAI({
 });
 
 export class Assistant extends OpenAIAssistant {
-  constructor(client = openai, model = "deepseek-chat") {
-    super(client, model);
+  constructor(model = "deepseek-chat", client = openai) {
+    super(model, client);
   }
 }
