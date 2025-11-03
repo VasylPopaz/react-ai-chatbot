@@ -26,3 +26,10 @@
   background: light-dark(#ffffff, #212121);
   border-radius: 16px;
 }
+
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}

@@ -4,7 +4,7 @@ import { Assistant as OpenAIAssistant } from "../assistants/openai";
 
 const openai = new OpenAI({
   baseURL: "https://api.x.ai/v1",
-  apiKey: import.meta.env.VITE_X_AI_API_KEY,
+  apiKey: import.meta.env.VITE_X_AI_API_KEY || '',
   dangerouslyAllowBrowser: true,
 });
 

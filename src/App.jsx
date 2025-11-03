@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Chat from "./components/Chat/Chat";
+import Theme from "./components/Theme/Theme";
 import Loader from "./components/Loader/Loader";
 import Controls from "./components/Controls/Controls";
 import Assistant from "./components/Assistant/Assistant";
@@ -66,7 +67,10 @@ const App = () => {
           isDisabled={isLoading || isStreaming}
           onSend={handleContentSend}
         />
-        <Assistant onAssistantChange={handleAssistantChange} />
+        <div className={s.settings}>
+          <Assistant onAssistantChange={handleAssistantChange} />
+          <Theme />
+        </div>
       </div>
       {isLoading && <Loader />}
     </div>
