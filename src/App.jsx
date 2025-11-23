@@ -3,6 +3,7 @@ import { useState } from "react";
 import Chat from "./components/Chat/Chat";
 import Theme from "./components/Theme/Theme";
 import Loader from "./components/Loader/Loader";
+import Sidebar from "./components/Sidebar/Sidebar";
 import Controls from "./components/Controls/Controls";
 import Assistant from "./components/Assistant/Assistant";
 
@@ -61,16 +62,21 @@ const App = () => {
         <img className={s.logo} src="/chat-bot.png" alt="Logo" />
         <h2 className={s.title}>AI Chatbot</h2>
       </header>
-      <div className={s.chatContainer}>
-        <Chat messages={messages} />
-        <Controls
-          isDisabled={isLoading || isStreaming}
-          onSend={handleContentSend}
-        />
-        <div className={s.settings}>
-          <Assistant onAssistantChange={handleAssistantChange} />
-          <Theme />
-        </div>
+      <div className={s.content}>
+        <Sidebar />
+        <main className={s.main}>
+          <div className={s.chatContainer}>
+            <Chat messages={messages} />
+            <Controls
+              isDisabled={isLoading || isStreaming}
+              onSend={handleContentSend}
+            />
+            <div className={s.settings}>
+              <Assistant onAssistantChange={handleAssistantChange} />
+              <Theme />
+            </div>
+          </div>
+        </main>
       </div>
       {isLoading && <Loader />}
     </div>
