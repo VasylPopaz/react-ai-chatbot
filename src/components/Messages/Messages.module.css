@@ -1,0 +1,36 @@
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 12px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group:nth-last-of-type(2) {
+  min-height: calc(100% - 12px);
+}
+
+.message {
+  width: 90%;
+  padding: 0 16px;
+  border-radius: 16px;
+  font-size: 14px;
+
+  &[data-role="user"] {
+    padding-block: 8px;
+    align-self: flex-end;
+    background: light-dark(#f3f3f3, #303030);
+  }
+
+  &[data-role="system"] {
+    background-color: rgb(224, 155, 155);
+  }
+}

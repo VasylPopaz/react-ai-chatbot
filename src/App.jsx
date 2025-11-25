@@ -2,58 +2,15 @@ import { useState } from "react";
 
 import Chat from "./components/Chat/Chat";
 import Theme from "./components/Theme/Theme";
-import Loader from "./components/Loader/Loader";
 import Sidebar from "./components/Sidebar/Sidebar";
-import Controls from "./components/Controls/Controls";
 import Assistant from "./components/Assistant/Assistant";
-
-import { useMessages } from "./hooks/useMessages";
 
 import s from "./App.module.css";
 
-let assistant;
-
 const App = () => {
-  const { messages, addMessage, updateLastMessageContent } = useMessages();
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
-
-  const handleContentSend = async (content) => {
-    addMessage({ role: "user", content });
-    setIsLoading(true);
-    try {
-      const result = assistant.chatStream(
-        content,
-        messages.filter(({ role }) => role !== "system")
-      );
-
-      let isFirstChunk = false;
-      for await (const chunk of result) {
-        if (!isFirstChunk) {
-          isFirstChunk = true;
-          addMessage({ role: "assistant", content: "" });
-          setIsLoading(false);
-          setIsStreaming(true);
-        }
-        updateLastMessageContent(chunk);
-      }
-
-      setIsStreaming(false);
-    } catch (error) {
-      addMessage({
-        role: "system",
-        content:
-          error?.message ??
-          "Sorry, I couldn't process your request. Please try again.",
-      });
-      setIsLoading(false);
-      setIsStreaming(false);
-    }
-  };
-
+  const [assistant, setAssistant] = useState();
   const handleAssistantChange = (newAssistant) => {
-    assistant = newAssistant;
+    setAssistant(newAssistant);
   };
 
   return (
@@ -65,20 +22,13 @@ const App = () => {
       <div className={s.content}>
         <Sidebar />
         <main className={s.main}>
-          <div className={s.chatContainer}>
-            <Chat messages={messages} />
-            <Controls
-              isDisabled={isLoading || isStreaming}
-              onSend={handleContentSend}
-            />
-            <div className={s.settings}>
-              <Assistant onAssistantChange={handleAssistantChange} />
-              <Theme />
-            </div>
+          <Chat assistant={assistant} />
+          <div className={s.settings}>
+            <Assistant onAssistantChange={handleAssistantChange} />
+            <Theme />
           </div>
         </main>
       </div>
-      {isLoading && <Loader />}
     </div>
   );
 };
