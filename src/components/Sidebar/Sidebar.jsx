@@ -2,29 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import s from "./Sidebar.module.css";
 
-const CHATS = [
-  {
-    id: 1,
-    title: "How to use AI Tools API in React Application",
-  },
-  {
-    id: 2,
-    title: "Gemini AI vs ChatGPT",
-  },
-  {
-    id: 3,
-    title: "Comparising Models for Popular AI Tools",
-  },
-  {
-    id: 4,
-    title: "How to use AI tools in your daily life",
-  },
-  {
-    id: 5,
-    title: "How to use AI tools in your daily work",
-  },
-];
-const Sidebar = ({ chats = CHATS, activeChatId = 1 }) => {
+const Sidebar = ({ chats, activeChatId, onActiveChatIdChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = useCallback(() => {
@@ -33,6 +11,13 @@ const Sidebar = ({ chats = CHATS, activeChatId = 1 }) => {
 
   const handleEscapePress = (event) => {
     if (isOpen && event.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  const handleChatClick = (chatId) => {
+    onActiveChatIdChange(chatId);
+    if (isOpen) {
       setIsOpen(false);
     }
   };
@@ -72,6 +57,7 @@ const Sidebar = ({ chats = CHATS, activeChatId = 1 }) => {
               key={chat.id}
               className={s.chat}
               data-active={chat.id === activeChatId}
+              onClick={() => handleChatClick(chat.id)}
             >
               <button type="button" className={s.chatButton}>
                 <div className={s.chatTitle}> {chat.title}</div>
