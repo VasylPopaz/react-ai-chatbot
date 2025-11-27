@@ -16,5 +16,5 @@ export const useMessages = () => {
     );
   };
 
-  return { messages, addMessage, updateLastMessageContent };
+  return { messages, setMessages, addMessage, updateLastMessageContent };
 };

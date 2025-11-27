@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Loader from "../Loader/Loader";
 import Messages from "../Messages/Messages";
@@ -8,11 +8,16 @@ import { useMessages } from "../../hooks/useMessages";
 
 import s from "./Chat.module.css";
 
-const Chat = ({ assistant }) => {
-  const { messages, addMessage, updateLastMessageContent } = useMessages();
+const Chat = ({ assistant, chatId, chatMessages }) => {
+  const { messages, setMessages, addMessage, updateLastMessageContent } =
+    useMessages();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+
+  useEffect(() => {
+    setMessages(chatMessages);
+  }, [chatId]);
 
   const handleContentSend = async (content) => {
     addMessage({ role: "user", content });

@@ -10,23 +10,25 @@ import s from "./App.module.css";
 const CHATS = [
   {
     id: 1,
-    title: "How to use AI Tools API in React Application",
+    title: "Gemini AI vs ChatGPT",
+    messages: [
+      { role: "user", content: "What is better ChatGPT or Gemini?" },
+      {
+        role: "assistant",
+        content: "Hi! Can you explain for what type of tasks you will use it?",
+      },
+    ],
   },
   {
     id: 2,
-    title: "Gemini AI vs ChatGPT",
-  },
-  {
-    id: 3,
-    title: "Comparising Models for Popular AI Tools",
-  },
-  {
-    id: 4,
     title: "How to use AI tools in your daily life",
-  },
-  {
-    id: 5,
-    title: "How to use AI tools in your daily work",
+    messages: [
+      { role: "user", content: "Hey! How to use AI in my life?" },
+      {
+        role: "assistant",
+        content: "Hi! Would you like to use it for work or for hobbies?",
+      },
+    ],
   },
 ];
 
@@ -34,6 +36,8 @@ const App = () => {
   const [assistant, setAssistant] = useState();
   const [chats, setChats] = useState(CHATS);
   const [activeChatId, setActiveChatId] = useState(1);
+  const activeChatMessages =
+    chats.find(({ id }) => id === activeChatId)?.messages ?? [];
 
   const handleAssistantChange = (newAssistant) => {
     setAssistant(newAssistant);
@@ -52,7 +56,11 @@ const App = () => {
           onActiveChatIdChange={setActiveChatId}
         />
         <main className={s.main}>
-          <Chat assistant={assistant} />
+          <Chat
+            assistant={assistant}
+            chatId={activeChatId}
+            chatMessages={activeChatMessages}
+          />
           <div className={s.settings}>
             <Assistant onAssistantChange={handleAssistantChange} />
             <Theme />
