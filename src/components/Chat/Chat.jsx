@@ -8,7 +8,7 @@ import { useMessages } from "../../hooks/useMessages";
 
 import s from "./Chat.module.css";
 
-const Chat = ({ assistant, chatId, chatMessages }) => {
+const Chat = ({ assistant, chatId, chatMessages, onChatMessagesUpdate }) => {
   const { messages, setMessages, addMessage, updateLastMessageContent } =
     useMessages();
 
@@ -18,6 +18,10 @@ const Chat = ({ assistant, chatId, chatMessages }) => {
   useEffect(() => {
     setMessages(chatMessages);
   }, [chatId]);
+
+  useEffect(() => {
+    onChatMessagesUpdate(messages);
+  }, [messages, onChatMessagesUpdate]);
 
   const handleContentSend = async (content) => {
     addMessage({ role: "user", content });

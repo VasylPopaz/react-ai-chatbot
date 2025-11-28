@@ -43,6 +43,14 @@ const App = () => {
     setAssistant(newAssistant);
   };
 
+  const handleChatMessagesUpdate = (messages = []) => {
+    setChats((prev) =>
+      prev.map((chat) =>
+        chat.id === activeChatId ? { ...chat, messages } : chat
+      )
+    );
+  };
+
   return (
     <div className={s.app}>
       <header className={s.header}>
@@ -60,6 +68,7 @@ const App = () => {
             assistant={assistant}
             chatId={activeChatId}
             chatMessages={activeChatMessages}
+            onChatMessagesUpdate={handleChatMessagesUpdate}
           />
           <div className={s.settings}>
             <Assistant onAssistantChange={handleAssistantChange} />
