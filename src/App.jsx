@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { v4 as uuidv4 } from "uuid";
 import Chat from "./components/Chat/Chat";
 import Theme from "./components/Theme/Theme";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -50,6 +50,12 @@ const App = () => {
       )
     );
   };
+  const handleNewChatCreate = () => {
+    const id = uuidv4();
+
+    setActiveChatId(id);
+    setChats((prev) => [...prev, { id, title: "New chat", messages: [] }]);
+  };
 
   return (
     <div className={s.app}>
@@ -62,6 +68,7 @@ const App = () => {
           chats={chats}
           activeChatId={activeChatId}
           onActiveChatIdChange={setActiveChatId}
+          onNewChatCreate={handleNewChatCreate}
         />
         <main className={s.main}>
           <Chat

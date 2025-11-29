@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 
 import s from "./Sidebar.module.css";
 
-const Sidebar = ({ chats, activeChatId, onActiveChatIdChange }) => {
+const Sidebar = ({
+  chats,
+  activeChatId,
+  onActiveChatIdChange,
+  onNewChatCreate,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = useCallback(() => {
@@ -51,6 +56,9 @@ const Sidebar = ({ chats, activeChatId, onActiveChatIdChange }) => {
         <MenuIcon />
       </button>
       <div className={s.sidebar} data-open={isOpen}>
+        <button type="button" class={s.newChatButton} onClick={onNewChatCreate}>
+          New Chat
+        </button>
         <ul className={s.chats}>
           {chats.map((chat) => (
             <li
