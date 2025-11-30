@@ -36,7 +36,7 @@ const Assistant = ({ onAssistantChange }) => {
   return (
     <div className={s.assistant}>
       <span>Assistant: </span>
-      <select defaultValue={value} onChange={handleValueChange}>
+      <select value={value} onChange={handleValueChange}>
         <optgroup label="Google AI">
           <option value="googleai:gemini-2.0-flash">Gemini 2.0 Flash</option>
           <option value="googleai:gemini-2.0-flash-lite">

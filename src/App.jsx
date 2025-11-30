@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import Chat from "./components/Chat/Chat";
@@ -42,14 +42,21 @@ const App = () => {
     [chats, activeChatId]
   );
 
-  const handleAssistantChange = (newAssistant) => {
+  const handleAssistantChange = useCallback((newAssistant) => {
     setAssistant(newAssistant);
-  };
+  }, []);
 
   const handleChatMessagesUpdate = (messages = []) => {
+    const title = messages[0]?.content.split(" ").slice(0, 7).join(" ");
     setChats((prev) =>
       prev.map((chat) =>
-        chat.id === activeChatId ? { ...chat, messages } : chat
+        chat.id === activeChatId
+          ? {
+              ...chat,
+              title: chat.title ?? title,
+              messages,
+            }
+          : chat
       )
     );
   };
@@ -57,7 +64,7 @@ const App = () => {
     const id = uuidv4();
 
     setActiveChatId(id);
-    setChats((prev) => [...prev, { id, title: "New chat", messages: [] }]);
+    setChats((prev) => [...prev, { id, messages: [] }]);
   };
 
   const handleActiveChatIdChange = (id) => {

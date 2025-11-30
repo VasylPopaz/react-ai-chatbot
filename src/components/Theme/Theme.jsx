@@ -27,7 +27,7 @@ const Theme = () => {
   return (
     <div className={s.theme}>
       <span>Theme:</span>
-      <select defaultValue="light dark" onChange={handleChange} value={theme}>
+      <select onChange={handleChange} value={theme}>
         <option value="light dark">System</option>
         <option value="light">Light</option>
         <option value="dark">Dark</option>

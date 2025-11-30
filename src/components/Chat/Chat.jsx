@@ -20,8 +20,10 @@ const Chat = ({ assistant, chatId, chatMessages, onChatMessagesUpdate }) => {
   }, [chatId]);
 
   useEffect(() => {
-    onChatMessagesUpdate(messages);
-  }, [messages, onChatMessagesUpdate]);
+    if (messages !== chatMessages) {
+      onChatMessagesUpdate(messages);
+    }
+  }, [messages]);
 
   const handleContentSend = async (content) => {
     addMessage({ role: "user", content });
