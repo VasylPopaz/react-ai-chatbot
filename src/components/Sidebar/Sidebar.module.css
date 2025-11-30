@@ -22,6 +22,11 @@
   text-align: center;
   cursor: pointer;
   color: light-dark(#212121, #ffffff);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .menuButton {

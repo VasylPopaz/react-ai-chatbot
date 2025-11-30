@@ -5,6 +5,7 @@ import s from "./Sidebar.module.css";
 const Sidebar = ({
   chats,
   activeChatId,
+  activeChatMessages,
   onActiveChatIdChange,
   onNewChatCreate,
 }) => {
@@ -56,22 +57,29 @@ const Sidebar = ({
         <MenuIcon />
       </button>
       <div className={s.sidebar} data-open={isOpen}>
-        <button type="button" class={s.newChatButton} onClick={onNewChatCreate}>
+        <button
+          type="button"
+          className={s.newChatButton}
+          disabled={activeChatMessages.length === 0}
+          onClick={onNewChatCreate}
+        >
           New Chat
         </button>
         <ul className={s.chats}>
-          {chats.map((chat) => (
-            <li
-              key={chat.id}
-              className={s.chat}
-              data-active={chat.id === activeChatId}
-              onClick={() => handleChatClick(chat.id)}
-            >
-              <button type="button" className={s.chatButton}>
-                <div className={s.chatTitle}> {chat.title}</div>
-              </button>
-            </li>
-          ))}
+          {chats
+            .filter(({ messages }) => messages.length > 0)
+            .map((chat) => (
+              <li
+                key={chat.id}
+                className={s.chat}
+                data-active={chat.id === activeChatId}
+                onClick={() => handleChatClick(chat.id)}
+              >
+                <button type="button" className={s.chatButton}>
+                  <div className={s.chatTitle}> {chat.title}</div>
+                </button>
+              </li>
+            ))}
         </ul>
       </div>
       {isOpen && <div className={s.overlay} onClick={toggleSidebar}></div>}

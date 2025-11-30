@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+
 import Chat from "./components/Chat/Chat";
 import Theme from "./components/Theme/Theme";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -36,8 +37,10 @@ const App = () => {
   const [assistant, setAssistant] = useState();
   const [chats, setChats] = useState(CHATS);
   const [activeChatId, setActiveChatId] = useState(1);
-  const activeChatMessages =
-    chats.find(({ id }) => id === activeChatId)?.messages ?? [];
+  const activeChatMessages = useMemo(
+    () => chats.find(({ id }) => id === activeChatId)?.messages ?? [],
+    [chats, activeChatId]
+  );
 
   const handleAssistantChange = (newAssistant) => {
     setAssistant(newAssistant);
@@ -57,6 +60,11 @@ const App = () => {
     setChats((prev) => [...prev, { id, title: "New chat", messages: [] }]);
   };
 
+  const handleActiveChatIdChange = (id) => {
+    setActiveChatId(id);
+    setChats((prev) => prev.filter(({ messages }) => messages.length > 0));
+  };
+
   return (
     <div className={s.app}>
       <header className={s.header}>
@@ -67,7 +75,8 @@ const App = () => {
         <Sidebar
           chats={chats}
           activeChatId={activeChatId}
-          onActiveChatIdChange={setActiveChatId}
+          activeChatMessages={activeChatMessages}
+          onActiveChatIdChange={handleActiveChatIdChange}
           onNewChatCreate={handleNewChatCreate}
         />
         <main className={s.main}>
