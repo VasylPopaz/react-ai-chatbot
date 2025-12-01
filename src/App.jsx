@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import Chat from "./components/Chat/Chat";
@@ -8,39 +8,18 @@ import Assistant from "./components/Assistant/Assistant";
 
 import s from "./App.module.css";
 
-const CHATS = [
-  {
-    id: 1,
-    title: "Gemini AI vs ChatGPT",
-    messages: [
-      { role: "user", content: "What is better ChatGPT or Gemini?" },
-      {
-        role: "assistant",
-        content: "Hi! Can you explain for what type of tasks you will use it?",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "How to use AI tools in your daily life",
-    messages: [
-      { role: "user", content: "Hey! How to use AI in my life?" },
-      {
-        role: "assistant",
-        content: "Hi! Would you like to use it for work or for hobbies?",
-      },
-    ],
-  },
-];
-
 const App = () => {
   const [assistant, setAssistant] = useState();
-  const [chats, setChats] = useState(CHATS);
-  const [activeChatId, setActiveChatId] = useState(1);
+  const [chats, setChats] = useState([]);
+  const [activeChatId, setActiveChatId] = useState(null);
   const activeChatMessages = useMemo(
     () => chats.find(({ id }) => id === activeChatId)?.messages ?? [],
     [chats, activeChatId]
   );
+
+  useEffect(() => {
+    handleNewChatCreate();
+  }, []);
 
   const handleAssistantChange = useCallback((newAssistant) => {
     setAssistant(newAssistant);

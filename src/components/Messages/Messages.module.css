@@ -33,4 +33,14 @@
   &[data-role="system"] {
     background-color: light-dark(#e09b9b, rgb(92, 55, 55));
   }
+
+  pre {
+    white-space: pre-wrap;
+  }
+
+  pre:has(code) {
+    padding: 8px;
+    border-radius: 8px;
+    background: light-dark(#f9f9f9, #171717);
+  }
 }
