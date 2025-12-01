@@ -6,8 +6,22 @@ const googleai = new GoogleGenAI({
 
 export class Assistant {
   #chat;
+  name = "googleai";
+
   constructor(model = "gemini-2.5-flash-lite") {
     this.#chat = googleai.chats.create({ model });
+  }
+
+  createChat(history) {
+    this.#chat = googleai.chats.create({
+      model: this.#chat.model,
+      history: history
+        .filter(({ role }) => role !== "system")
+        .map(({ role, content }) => ({
+          role: role === "assistant" ? "model" : role,
+          parts: [{ text: content }],
+        })),
+    });
   }
 
   async chat(content) {

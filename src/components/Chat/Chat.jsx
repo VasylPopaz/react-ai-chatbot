@@ -17,6 +17,9 @@ const Chat = ({ assistant, chatId, chatMessages, onChatMessagesUpdate }) => {
 
   useEffect(() => {
     setMessages(chatMessages);
+    if (assistant?.name === "googleai") {
+      assistant.createChat(chatMessages);
+    }
   }, [chatId]);
 
   useEffect(() => {
