@@ -8,7 +8,13 @@ import { useMessages } from "../../hooks/useMessages";
 
 import s from "./Chat.module.css";
 
-const Chat = ({ assistant, chatId, chatMessages, onChatMessagesUpdate }) => {
+const Chat = ({
+  assistant,
+  chatId,
+  chatMessages,
+  onChatMessagesUpdate,
+  isActive = false,
+}) => {
   const { messages, setMessages, addMessage, updateLastMessageContent } =
     useMessages();
 
@@ -24,9 +30,9 @@ const Chat = ({ assistant, chatId, chatMessages, onChatMessagesUpdate }) => {
 
   useEffect(() => {
     if (messages !== chatMessages) {
-      onChatMessagesUpdate(messages);
+      onChatMessagesUpdate(chatId, messages);
     }
-  }, [messages]);
+  }, [chatId, chatMessages, messages, onChatMessagesUpdate]);
 
   const handleContentSend = async (content) => {
     addMessage({ role: "user", content });
@@ -60,6 +66,8 @@ const Chat = ({ assistant, chatId, chatMessages, onChatMessagesUpdate }) => {
       setIsStreaming(false);
     }
   };
+
+  if (!isActive) return null;
 
   return (
     <>
